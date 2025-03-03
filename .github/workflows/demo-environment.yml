@@ -18,3 +18,4 @@ jobs:
 
       - name: Deploy
         run: echo "Using environment with var ${{ vars.ENV_VAR_1 }}."
+        # placeholder for demo
