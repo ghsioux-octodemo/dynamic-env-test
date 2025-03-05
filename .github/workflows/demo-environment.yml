@@ -26,6 +26,7 @@ jobs:
           ECR_SECRET: ${{ secrets.ECR_SECRET }}
 
   container-test-job:
+    needs: deploy
     runs-on: ubuntu-latest
     container:
       image: ${{ needs.deploy.outputs.ecr_string }}
