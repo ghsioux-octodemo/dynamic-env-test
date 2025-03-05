@@ -29,7 +29,7 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     container:
-      image: ${{ needs.deploy.outputs.ecr_string }}
+      image: tttt
 
     steps:
       - run: echo "Running tests in container"
