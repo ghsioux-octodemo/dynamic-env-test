@@ -15,10 +15,15 @@ jobs:
     outputs:
       ecr: ${{ steps.build-ecr-string.outputs.ecr }}
       output2: ${{ steps.step2.outputs.test }}
+
     steps:
+    - name: Build ECR string 1
+      run: echo ${{ env.ECR_SECRET }}
+      env:
+        ECR_SECRET: ${{ secrets.ECR_SECRET }}
     - name: Build ECR string
       id: build-ecr-string
-      run: echo "ecr=$${{ env.ECR_SECRET }}.dkr.ecr.eu-central-1.amazonaws.com/ecr-name" >> $GITHUB_OUTPUT
+      run: echo "ecr=${{ env.ECR_SECRET }}.dkr.ecr.eu-central-1.amazonaws.com/ecr-name" >> $GITHUB_OUTPUT
       env:
         ECR_SECRET: ${{ secrets.ECR_SECRET }}
     - id: step2
