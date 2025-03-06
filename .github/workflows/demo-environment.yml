@@ -19,16 +19,14 @@ jobs:
     steps:
     - name: Build ECR string
       id: build-ecr-string
-      shell: bash
-      run: |
-        ECR_STRING="${{ secrets.ECR_SECRET }}.dkr.ecr.eu-central-1.amazonaws.com/ecr-name"
-        echo "::add-mask::$ECR_STRING"
-        SECRET_ECR_STRING=$(secret-store store-secret "$ECR_STRING")
-        echo "ecr=$SECRET_ECR_STRING" >> "$GITHUB_OUTPUT"
+      run: echo "ecr=${{ secrets.ECR_SECRET }}.dkr.ecr.eu-central-1.amazonaws.com/ecr-name" >> $GITHUB_OUTPUT
+    - name: Print output
+      id: print-output
+      run: echo "ecr=${{ steps.build-ecr-string.outputs.ecr }}"
 
   job2:
     runs-on: ubuntu-latest
     needs: deploy
     steps:
-    - run: echo ${{needs.deploy.outputs.ecr}}
+    - run: echo ${{needs.deploy.outputs.ecr}} ${{needs.deploy.outputs.output2}}
 
