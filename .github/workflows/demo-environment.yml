@@ -18,7 +18,7 @@ jobs:
     steps:
     - name: Build ECR string
       id: build-ecr-string
-      run: echo "ecr_string=${{ env.ECR_SECRET }}.dkr.ecr.eu-central-1.amazonaws.com/ecr-name" >> $GITHUB_OUTPUT
+      run: echo "ecr_string=toto.dkr.ecr.eu-central-1.amazonaws.com/ecr-name" >> $GITHUB_OUTPUT
       env:
         ECR_SECRET: ${{ secrets.ECR_SECRET }}
     - id: step2
@@ -29,3 +29,32 @@ jobs:
     steps:
     - run: echo ${{needs.deploy.outputs.ecr}} ${{needs.deploy.outputs.output2}}
 
+
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' && 'production' || github.ref == 'refs/heads/main' && 'production' || github.ref == 'refs/heads/development' && 'development' }}
+    outputs:
+      ecr_string: ${{ steps.build-ecr-string.outputs.ecr_string }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy
+        run: echo "Using environment with var ${{ vars.ENV_VAR_1 }}."
+
+      - name: Build ECR string
+        id: build-ecr-string
+        run: echo "ecr_string=${{ env.ECR_SECRET }}.dkr.ecr.eu-central-1.amazonaws.com/ecr-name" >> $GITHUB_OUTPUT
+        env:
+          ECR_SECRET: ${{ secrets.ECR_SECRET }}
+
+      - name: Show output
+        run: echo "ECR string is ${{ steps.build-ecr-string.outputs.ecr_string }}"
+
+  container-test-job:
+    needs: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "Running tests in container in ${{ needs.deploy.outputs.ecr_string }}"
