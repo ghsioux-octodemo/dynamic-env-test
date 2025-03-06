@@ -26,7 +26,8 @@ jobs:
 
   job2:
     runs-on: ubuntu-latest
+    container:
+      image: ${{ needs.deploy.outputs.ecr }}
     needs: deploy
     steps:
-    - run: echo ${{needs.deploy.outputs.ecr}} ${{needs.deploy.outputs.output2}}
-
+    - run: echo "Running from a container with ${{needs.deploy.outputs.ecr}}"
