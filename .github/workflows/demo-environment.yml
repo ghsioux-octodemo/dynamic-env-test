@@ -25,11 +25,15 @@ jobs:
         env:
           ECR_SECRET: ${{ secrets.ECR_SECRET }}
 
+      - name: Show output
+        run: echo "ECR string is ${{ steps.build-ecr-string.outputs.ecr_string }}"
+
   container-test-job:
     needs: deploy
     runs-on: ubuntu-latest
     container:
-      image: ${{ needs.build-ecr-string.outputs.ecr_string }}
+      image: ${{ needs.deploy.outputs.ecr_string }}
 
     steps:
       - run: echo "Running tests in container in ${{ needs.build-ecr-string.outputs.ecr_string }}"
+      - run: echo "Running tests in container in ${{ needs.deploy.outputs.ecr_string }}"
