@@ -23,7 +23,8 @@ jobs:
       run: |
         ECR_STRING="${{ secrets.ECR_SECRET }}.dkr.ecr.eu-central-1.amazonaws.com/ecr-name"
         echo "::add-mask::$ECR_STRING"
-        echo "ecr=$ECR_STRING" >> "$GITHUB_OUTPUT"
+        SECRET_ECR_STRING=$(secret-store store-secret "$ECR_STRING")
+        echo "ecr=$SECRET_ECR_STRING" >> "$GITHUB_OUTPUT"
 
   job2:
     runs-on: ubuntu-latest
