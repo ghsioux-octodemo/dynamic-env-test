@@ -18,7 +18,7 @@ jobs:
     steps:
     - name: Build ECR string
       id: build-ecr-string
-      run: echo "ecr=toto.dkr.ecr.eu-central-1.amazonaws.com/ecr-name" >> $GITHUB_OUTPUT
+      run: echo "ecr=$${{ env.ECR_SECRET }}.dkr.ecr.eu-central-1.amazonaws.com/ecr-name" >> $GITHUB_OUTPUT
       env:
         ECR_SECRET: ${{ secrets.ECR_SECRET }}
     - id: step2
