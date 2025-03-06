@@ -10,6 +10,7 @@ on:
 jobs:
 
   deploy:
+    environment: production
     runs-on: ubuntu-latest
     # Expose step outputs as job outputs
     outputs:
@@ -18,14 +19,14 @@ jobs:
 
     steps:
     - name: Build ECR string 1
+      run: echo ${{ secrets.ECR_SECRET }}
+    - name: Build ECR string 2 
       run: echo ${{ env.ECR_SECRET }}
       env:
         ECR_SECRET: ${{ secrets.ECR_SECRET }}
     - name: Build ECR string
       id: build-ecr-string
-      run: echo "ecr=${{ env.ECR_SECRET }}.dkr.ecr.eu-central-1.amazonaws.com/ecr-name" >> $GITHUB_OUTPUT
-      env:
-        ECR_SECRET: ${{ secrets.ECR_SECRET }}
+      run: echo "ecr=${{ secrets.ECR_SECRET }}.dkr.ecr.eu-central-1.amazonaws.com/ecr-name" >> $GITHUB_OUTPUT
     - id: step2
       run: echo "test=world" >> "$GITHUB_OUTPUT"
   job2:
