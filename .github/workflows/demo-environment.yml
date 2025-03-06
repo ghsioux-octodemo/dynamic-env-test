@@ -32,4 +32,4 @@ jobs:
       image: ${{ needs.deploy.outputs.ecr_string }}
 
     steps:
-      - run: echo "Running tests in container"
+      - run: echo "Running tests in container in ${{ needs.deploy.outputs.ecr_string }}"
